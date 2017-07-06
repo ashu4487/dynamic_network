@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 
 
 #Parse the command line arguments
-xtc,tpr,ndx,skip,out=command_args.parseargs()
+xtc,tpr,ndx,skip,b,e,out=command_args.parseargs()
 
 if os.path.isfile("all_contacts.txt"):
     print("Contacts already existing in all_contacts.txt")
@@ -25,7 +25,8 @@ if os.path.isfile("all_contacts.txt"):
 else:
     print("Fresh run")
     all_contacts=set()                                      #create empty set to keep all contacts
-    for i in range(0,10000,int(skip)):
+#    for i in range(0,10000,int(skip)):
+    for i in range(int(b),int(e),int(skip)):    
         fname=create_network.extract_frame(xtc,tpr,ndx,i) #Extracts frame and saves the PDB file with fname
         contacts=create_network.find_contact(fname) # Find the contacts ib protein structure
         outf=open(fname[:-4]+'contacts.txt','wb')

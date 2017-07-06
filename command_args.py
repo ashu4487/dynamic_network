@@ -15,6 +15,8 @@ def parseargs():
     parser.add_argument('-s',dest='tpr',action='store', help='structure file for the analysis')
     parser.add_argument('-n',dest='ndx_file',action='store', help='index file')
     parser.add_argument('-skip',dest='skip',action='store', help='frames to skip', default='0', nargs='?', const='0')
+    parser.add_argument('-b',dest='beg',action='store', help='starting time to extract in ps', default='0', nargs='?', const='0')
+    parser.add_argument('-e',dest='end',action='store', help='Last frame to extract in ps')
     parser.add_argument('-o',dest='outfile_name',action='store', help='output file for the analysis', default='outfile.txt', nargs='?', const='outfile.txt')
     
     args=parser.parse_args()
@@ -31,7 +33,7 @@ def parseargs():
     else:
         print(args.ndx_file+" residue list file does not exist" )
     
-    return xtc,tpr,ndx_file,args.skip,args.outfile_name
+    return xtc,tpr,ndx_file,args.skip,args.beg,args.end,args.outfile_name
 #def gromacs_exe():
 #    if spawn.find_executable("gmx"):
 #        return '\'gmx\', \'hbond\''
