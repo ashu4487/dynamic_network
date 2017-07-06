@@ -20,14 +20,15 @@ xtc,tpr,ndx,skip,out=command_args.parseargs()
 
 if os.path.isfile("all_contacts.txt"):
     print("Contacts already existing in all_contacts.txt")
-    with open('all_contacts.txt','r') as all_con:
+    with open('all_contacts.txt','rb') as all_con:
         all_contacts=pickle.load(all_con)
 else:
+    print("Fresh run")
     all_contacts=set()                                      #create empty set to keep all contacts
     for i in range(0,10000,int(skip)):
         fname=create_network.extract_frame(xtc,tpr,ndx,i) #Extracts frame and saves the PDB file with fname
         contacts=create_network.find_contact(fname) # Find the contacts ib protein structure
-        outf=open(fname[:-4]+'contacts.txt','w')
+        outf=open(fname[:-4]+'contacts.txt','wb')
         pickle.dump(contacts,outf)
         outf.close()
         scon=set()
@@ -36,10 +37,10 @@ else:
         all_contacts=set(all_contacts).union(scon) #Add new contacts to all contact list
         #print(list(all_contacts)[0:5])
         #print(con_count)
-        #print(len(all_contacts))
+        print(len(all_contacts))
         #print(sys.getsizeof(all_contacts))
         os.remove(fname)                            #removes the PDB file to save space    
-    with open('all_contacts.txt','w') as all_out:
+    with open('all_contacts.txt','wb') as all_out:
         pickle.dump(all_contacts,all_out)
 
     
@@ -48,10 +49,10 @@ if os.path.isfile("contact_matrix.txt"):
     contact_mat=np.loadtxt('contact_matrix.txt')
     
 else:
-    contact_mat=np.zeros([len(all_contacts),5])
+    contact_mat=np.zeros([len(all_contacts),100])
     count=0
-    for i1 in range(0,1000,int(skip)):
-        with open('frame'+str(i1)+'contacts.txt','r') as rcon:
+    for i1 in range(0,10000,int(skip)):
+        with open('frame'+str(i1)+'contacts.txt','rb') as rcon:
             con_read=pickle.load(rcon)
         for item in con_read:
             if item in list(all_contacts):
